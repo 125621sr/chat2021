@@ -3,18 +3,72 @@ import random
 import IPython
 from google.colab import output
 
-
-n = 0 
-def chat(text, **kw):  #チャット用の関数（ここを書き換える）
-  global n
-  n += 1
-  return 'ほ' * n
-
 # アイコンの指定
-BOT_ICON = 'https://2.bp.blogspot.com/-mRJKwyORJkQ/Wn1ZTOBrszI/AAAAAAABKKs/Bg5yjLL9RYwmfUM0pEkBA3Ky3ui0IOZWQCLcBGAs/s800/animal_smile_inu.png'
-YOUR_ICON = 'https://4.bp.blogspot.com/-SC6_6x7MQnc/Wn1ZUkdcPxI/AAAAAAABKK8/qqHVlc8E7lEGsEwJ_J8H6Gp9RvfhTX67wCLcBGAs/s800/animal_smile_neko.png'
+BOT_ICON = 'https://1.bp.blogspot.com/-_tnyZ46sJ_M/X1LsmD2uZOI/AAAAAAABa_w/FjmL4ow5bQY91MTkM63t5h_ADylNvTfrgCNcBGAsYHQ/s180-c/yumekawa_angel_tenshi.png'
+YOUR_ICON = 'https://1.bp.blogspot.com/-ggxynLSeNT0/XlygE7S-29I/AAAAAAABXs4/Mz9Vv5TvfhAP1SkHC3CEKq_gu7q1ofOfACNcBGAsYHQ/s180-c/yumekawa_baby.png'
 
-def run_chat(chat = chat, start='占いするよ', **kw):
+# フレーム 状態をもつ辞書
+# 'birthdaya', 'birthdayb', 'message','asking'
+frame = {}
+
+message = ['笑顔を見せると良いことあるかも！','恋が実りますように！！！応援してるよ💕💕','勇気を出して話しかけると良いことあるかも！!(UoxoU)♡','自分に自信を持つと幸せが増えるよ！自信もって大丈夫👍',
+           'ポジティブに行こう👍👍','できることからコツコツ始めて行くだけでも良き✊','あなたが努力しているの知ってるから、大丈夫！！',
+           '素敵なことが起こりますように…(=^・・^=)','2人の距離が縮まるおまじないをかけるね！えいっ🎵']
+
+def uranai(input_text):
+  global frame # 外部の状態を参照する
+  if 'asking' in frame:  # asking から更新する
+    frame[frame['asking']] = input_text.strip()
+    del frame['asking']
+
+  if 'birthdaya' not in frame:
+    frame['asking'] = 'birthdaya' # 誕生日をたずねる  
+    return 'あなたの誕生日は？'
+
+  if 'birthdaya' in frame and 'birthdayb' not in frame:
+    frame['asking'] = 'birthdayb' # 相手の誕生日をたずねる    
+    return '相手の誕生日は？'
+
+
+  if 'birthdaya' in frame and 'birthdayb' in frame and 'message' not in frame:
+    
+    frame['asking'] = 'message'
+
+    birthdaya = frame['birthdaya']
+    birthdayb = frame['birthdayb']
+
+
+    while len(birthdaya) >= 2:
+      birthdaya = str(sum(int(x) for x in a))
+      if birthdaya in ('11','22','33','44'):
+        break
+
+    while len(birthdayb) >= 2:
+      birthdayb = str(sum(int(x) for x in b))
+      if birthdayb in ('11','22','33','44'):
+        break
+
+    x = abs(int(birthdaya)-int(birthdayb))
+
+    y = (-100/43)*x+100
+
+    if int(y)>=90:
+      return '2人の相性はとても良いです 💗'
+    if int(y)>=30 and int(y)<80:
+      return '2人の相性は良いです 💛'
+    if int(y)<30:
+      return '2人の相性は普通かも 💦'
+
+  if 'birthdaya' in frame and 'birthdayb' in frame and 'message' in frame:
+
+    frame[frame['message']] = input_text.strip()
+    del frame['message']
+
+    return  random.choice(message)
+
+  return output_text
+
+def run_chat(chat = uranai, start='相性占いする？', **kw):
 
   def display_bot(bot_text):
     with output.redirect_to_element('#output'):
@@ -83,7 +137,6 @@ def run_chat(chat = chat, start='占いするよ', **kw):
         /* アイコン画像 */
         .icon-img img {
             border-radius: 50%;
-            border: 2px solid #eee;
         }
 
         /* アイコンネーム */
@@ -92,7 +145,7 @@ def run_chat(chat = chat, start='占いするよ', **kw):
             width: 80px;
             text-align: center;
             top: 83px;
-            color: #fff;
+            color: mediumpurple;
             font-size: 10px;
         }
 
@@ -120,10 +173,10 @@ def run_chat(chat = chat, start='占いするよ', **kw):
         /* 吹き出し内のテキスト */
         .sb-txt {
             position: relative;
-            border: 2px solid #eee;
+            border: 1px solid mediumpurple;
             border-radius: 6px;
-            background: #eee;
-            color: #333;
+            background: mistyrose;
+            color: mediumpurple;
             font-size: 15px;
             line-height: 1.7;
             padding: 18px;
@@ -155,7 +208,7 @@ def run_chat(chat = chat, start='占いするよ', **kw):
         .sb-txt-left:before {
             left: -7px;
             border-width: 7px 10px 7px 0;
-            border-color: transparent #eee transparent transparent;
+            border-color: transparent mediumpurple transparent transparent;
         }
 
         .sb-txt-left:after {
@@ -168,7 +221,7 @@ def run_chat(chat = chat, start='占いするよ', **kw):
         .sb-txt-right:before {
             right: -7px;
             border-width: 7px 0 7px 10px;
-            border-color: transparent transparent transparent #eee;
+            border-color: transparent transparent transparent mediumpurple;
         }
 
         .sb-txt-right:after {
@@ -221,8 +274,8 @@ def run_chat(chat = chat, start='占いするよ', **kw):
           }
         });
       </script>
-    <div id='output' style='background: #66d;'></div>
-    <div style='text-align: right'><textarea id='input' style='width: 100%; background: #eee;'></textarea></div>
+    <div id='output' style='background: lavender; border: 1px solid mediumpurple;'></div>
+    <div style='text-align: right'><textarea id='input' style='width: 100%; background: mistyrose;'></textarea></div>
       '''))
 
   def convert(your_text):
@@ -235,32 +288,4 @@ def run_chat(chat = chat, start='占いするよ', **kw):
   if start is not None:
     display_bot(start)
 
-# フレーム 状態をもつ辞書
-# 'name', 'birthday', 'asking'
-frame = {}
-
-def myuranai(input_text):
-  global frame # 外部の状態を参照する
-  if 'asking' in frame:  # asking から更新する
-    frame[frame['asking']] = input_text
-    del frame['asking']
-
-  if 'name' not in frame:
-    frame['asking'] = 'name' # 名前をたずねる  
-    return 'あなたの名前は？'
-
-  if 'name' in frame and 'birthday' not in frame:
-    frame['asking'] = 'birthday' # 誕生日をたずねる    
-    return 'あなたの誕生日は？'
-
-  if 'name' in frame and 'birthday' in frame:
-    # 占います
-    number = hash(frame['name']+frame['birthday']) % 10
-    if number > 5:
-      return 'あなたの運勢は大吉'
-    return 'あなたの運勢は吉'
-
-  return output_text
-
-def start():
-  run_chat(chat=myuranai)    
+run_chat(chat=uranai)
