@@ -39,12 +39,12 @@ def uranai(input_text):
 
 
     while len(birthdaya) >= 2:
-      birthdaya = str(sum(int(x) for x in a))
+      birthdaya = str(sum(int(x) for x in birthdaya))
       if birthdaya in ('11','22','33','44'):
         break
 
     while len(birthdayb) >= 2:
-      birthdayb = str(sum(int(x) for x in b))
+      birthdayb = str(sum(int(x) for x in birthdayb))
       if birthdayb in ('11','22','33','44'):
         break
 
