@@ -288,4 +288,4 @@ def run_chat(chat = uranai, start='相性占いする？', **kw):
   if start is not None:
     display_bot(start)
 
-run_chat(chat=uranai)
+#run_chat(chat=uranai)
